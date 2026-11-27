@@ -28,3 +28,4 @@ en.wiktionary.org/wiki/data_mining
 > do not put a “Page break before” setting on each slide’s first paragraph,
 > put  blank line after the text and before the slide in each topic
 > ensure full blank line around each slide, some obyl have 3 side black line, not 4 sided sqaure around each slide.
+> prepend the name of the created .docx file with the letter lowercae "w" and the number of the week, for example "w9-accesibility", "w10-visualising_text", etc

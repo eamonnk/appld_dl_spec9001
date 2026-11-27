@@ -1,0 +1,23 @@
+rows = []
+for p in files:                                    # clean list from the download cell (9,778 images)
+    with Image.open(p) as im:
+        rgb = np.asarray(im.convert("RGB"), dtype=np.float32)
+        rows.append({
+            "file":          str(p),
+            "folder":        p.parent.name,            # raw folder name, e.g. "001"
+            "age":           int(p.parent.name),
+            "width":         im.size[0],
+            "height":        im.size[1],
+            "mode":          im.mode,
+            "is_grey":       bool(np.array_equal(rgb[..., 0], rgb[..., 1]) and np.array_equal(rgb[..., 1], rgb[..., 2])),
+            "brightness":    rgb.mean(),               # 0 = black, 255 = white
+            "contrast":      rgb.std(),                # spread of pixel values
+            "colourfulness": rgb.std(axis=2).mean(),   # 0 = no colour at all
+            "file_kb":       p.stat().st_size / 1024,
+            "md5":           hashlib.md5(p.read_bytes()).hexdigest(),
+        })
+
+raw = pd.DataFrame(rows)
+raw["duplicate"] = raw.duplicated("md5", keep=False)
+raw.to_csv("/content/data/image_features.csv", index=False)
+print("Images:", raw.shape)
